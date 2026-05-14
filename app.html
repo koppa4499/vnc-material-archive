@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VNC Material Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Courier Prime', monospace; background: white; color: black; }
+        .header { border-bottom: 1px solid black; padding: 30px; margin-bottom: 30px; }
+        .header h1 { font-size: 12px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; }
+        .header p { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-top: 5px; }
+        .container { max-width: 950px; margin: 0 auto; padding: 0 20px 40px; }
+        .tabs { display: flex; border-bottom: 1px solid black; margin-bottom: 40px; }
+        .tab-btn { padding: 12px 20px; border: none; background: white; cursor: pointer; font-size: 11px; font-weight: bold; border-bottom: 2px solid white; font-family: 'Courier Prime', monospace; text-transform: uppercase; color: black; }
+        .tab-btn.active { border-bottom: 2px solid black; }
+        .tab-btn:hover { background: #f0f0f0; }
+        .content { display: none; }
+        .content.active { display: block; }
+        .form-section { margin-bottom: 30px; }
+        .form-section h2 { font-size: 10px; font-weight: bold; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid black; text-transform: uppercase; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid black; padding: 10px; text-align: left; font-size: 10px; }
+        th { background: white; font-weight: bold; text-transform: uppercase; width: 25%; }
+        label { display: block; font-size: 10px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
+        input, textarea { padding: 8px; border: 1px solid black; background: white; color: black; font-size: 10px; font-family: 'Courier Prime', monospace; width: 100%; }
+        .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .checkbox-item { display: flex; gap: 6px; align-items: center; }
+        .checkbox-item input { width: auto; }
+        .checkbox-item label { margin: 0; text-transform: none; font-weight: normal; }
+        button { padding: 10px 16px; border: 1px solid black; background: white; color: black; cursor: pointer; font-weight: bold; font-family: 'Courier Prime', monospace; text-transform: uppercase; font-size: 10px; }
+        button:hover { background: #f0f0f0; }
+        button.primary { background: black; color: white; }
+        button.primary:hover { background: #333; }
+        .buttons { display: flex; gap: 10px; margin-top: 30px; }
+        .message { padding: 12px; border: 1px solid black; margin-bottom: 20px; font-size: 10px; display: none; }
+        .success { color: black; }
+        .error { color: red; border-color: red; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .card { border: 1px solid black; padding: 12px; }
+        .card h3 { font-size: 10px; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; }
+        .card p { font-size: 9px; margin-bottom: 6px; }
+        .badges { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }
+        .badge { border: 1px solid black; padding: 2px 6px; font-size: 8px; font-weight: bold; text-transform: uppercase; }
+        .empty { padding: 40px; text-align: center; font-size: 11px; }
+        .filter-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VNC Venice Project</h1>
+        <p>Material Research Unit - Material Documentation</p>
+    </div>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-btn active" id="btnForm" onclick="switchTab('form')">Add Material</button>
+            <button class="tab-btn" id="btnArchive" onclick="switchTab('archive')">View Archive</button>
+        </div>
+
+        <!-- FORM TAB -->
+        <div id="form" class="content active">
+            <div class="message success" id="successMsg">✓ Material successfully saved!</div>
+            <div class="message error" id="errorMsg"></div>
+
+            <form id="materialForm" onsubmit="return saveMaterial(event)">
+                <input type="hidden" id="imageData" value="">
+                
+                <div style="margin-bottom: 20px;">
+                    <label>Material/System name *</label>
+                    <input type="text" id="materialName" required>
+                    <label style="margin-top: 10px;">Code *</label>
+                    <input type="text" id="code" required>
+                </div>
+
+                <div class="form-section">
+                    <h2>General Data</h2>
+                    <table>
+                        <tr>
+                            <th>Matrix</th>
+                            <td>
+                                <div class="checkbox-grid">
+                                    <div class="checkbox-item"><input type="checkbox" value="EXISTING" name="matrix"> <label>Existing</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="HISTORICAL" name="matrix"> <label>Historical</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="GEOGRAPHICAL" name="matrix"> <label>Geographical</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="TECHNOLOGICAL" name="matrix"> <label>Technological</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="INDUSTRIAL" name="matrix"> <label>Industrial</label></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Provider Source</th>
+                            <td><input type="text" id="provider"></td>
+                        </tr>
+                        <tr>
+                            <th>Cost</th>
+                            <td><input type="text" id="cost"></td>
+                        </tr>
+                        <tr>
+                            <th>Main Image/Diagram</th>
+                            <td style="min-height: 80px; display: table-cell; vertical-align: middle;">
+                                <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                                <button type="button" onclick="document.getElementById('imageInput').click()" style="background: white; border: 1px solid black; padding: 10px 20px; cursor: pointer;">Upload Image</button>
+                                <div id="imagePreview" style="margin-top: 10px;"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="form-section">
+                    <h2>System Data</h2>
+                    <table>
+                        <tr>
+                            <th>Process (Fabrication)</th>
+                            <td>
+                                <div class="checkbox-grid">
+                                    <div class="checkbox-item"><input type="checkbox" value="FOLD" name="processFab"> <label>Fold</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="EXTRUDE" name="processFab"> <label>Extrude</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="CAST" name="processFab"> <label>Cast</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="CUT" name="processFab"> <label>Cut</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="PRESS" name="processFab"> <label>Press</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="OTHER" name="processFab"> <label>Other</label></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Process (Assembly)</th>
+                            <td>
+                                <div class="checkbox-grid">
+                                    <div class="checkbox-item"><input type="checkbox" value="ASSEMBLE" name="processAssembly"> <label>Assemble</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="STACK" name="processAssembly"> <label>Stack</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="FIX" name="processAssembly"> <label>Fix</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="POUR" name="processAssembly"> <label>Pour</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="OTHER_ASM" name="processAssembly"> <label>Other</label></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>System Type</th>
+                            <td>
+                                <div class="checkbox-grid">
+                                    <div class="checkbox-item"><input type="checkbox" value="LINEAR" name="systemType"> <label>Linear</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="PANEL" name="systemType"> <label>Panel</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="FRAME" name="systemType"> <label>Frame</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="MODULAR" name="systemType"> <label>Modular</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="SURFACE" name="systemType"> <label>Surface</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="HYBRID" name="systemType"> <label>Hybrid</label></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Structural Logic</th>
+                            <td>
+                                <div class="checkbox-grid">
+                                    <div class="checkbox-item"><input type="checkbox" value="SELF-SUPPORTING" name="structuralLogic"> <label>Self-supporting</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="SUPPORTED" name="structuralLogic"> <label>Supported</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="SUSPENDED" name="structuralLogic"> <label>Suspended</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="ATTACHED" name="structuralLogic"> <label>Attached</label></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="form-section">
+                    <h2>Spatial Definition</h2>
+                    <table>
+                        <tr>
+                            <th>Spatial Role</th>
+                            <td>
+                                <div class="checkbox-grid">
+                                    <div class="checkbox-item"><input type="checkbox" value="STRUCTURE" name="spatialRole"> <label>Structure</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="DIVIDER" name="spatialRole"> <label>Divider</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="SURFACE" name="spatialRole"> <label>Surface</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="FILTER" name="spatialRole"> <label>Filter</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="DISPLAY" name="spatialRole"> <label>Display</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="CIRCULATION" name="spatialRole"> <label>Circulation</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="INFRASTRUCTURE" name="spatialRole"> <label>Infrastructure</label></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Scale</th>
+                            <td>
+                                <div class="checkbox-grid">
+                                    <div class="checkbox-item"><input type="checkbox" value="OBJECT" name="scale"> <label>Object</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="FURNITURE" name="scale"> <label>Furniture</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="ROOM" name="scale"> <label>Room</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="BUILDING" name="scale"> <label>Building</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="LANDSCAPE" name="scale"> <label>Landscape</label></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Position</th>
+                            <td>
+                                <div class="checkbox-grid">
+                                    <div class="checkbox-item"><input type="checkbox" value="FLOOR" name="position"> <label>Floor</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="WALL" name="position"> <label>Wall</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="CEILING" name="position"> <label>Ceiling</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="FREESTANDING" name="position"> <label>Freestanding</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="EXTERIOR" name="position"> <label>Exterior</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="OTHER_POS" name="position"> <label>Other</label></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="form-section">
+                    <h2>Relation to Existing</h2>
+                    <table>
+                        <tr>
+                            <th>Operation</th>
+                            <td>
+                                <div class="checkbox-grid">
+                                    <div class="checkbox-item"><input type="checkbox" value="BLEND" name="operation"> <label>Blend</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="CONTRAST" name="operation"> <label>Contrast</label></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="form-section">
+                    <h2>Performance</h2>
+                    <table>
+                        <tr>
+                            <th>Assembly</th>
+                            <td>
+                                <div class="checkbox-grid">
+                                    <div class="checkbox-item"><input type="checkbox" value="DRY" name="assembly"> <label>Dry</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="WET" name="assembly"> <label>Wet</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="MIXED" name="assembly"> <label>Mixed</label></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Reuse</th>
+                            <td>
+                                <div class="checkbox-grid">
+                                    <div class="checkbox-item"><input type="checkbox" value="HIGH" name="reuse"> <label>High</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="MEDIUM" name="reuse"> <label>Medium</label></div>
+                                    <div class="checkbox-item"><input type="checkbox" value="LOW" name="reuse"> <label>Low</label></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="form-section">
+                    <h2>Notes</h2>
+                    <textarea id="notes" style="min-height: 100px;"></textarea>
+                </div>
+
+                <div class="buttons">
+                    <button type="submit" class="primary">Save Material</button>
+                    <button type="reset">Clear</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- ARCHIVE TAB -->
+        <div id="archive" class="content">
+            <div style="margin-bottom: 20px;">
+                <input type="text" id="search" placeholder="Search by name or code..." style="width: 100%; padding: 8px; border: 1px solid black; font-family: 'Courier Prime', monospace;">
+            </div>
+            <div id="grid" class="grid"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        let supabaseClient = null;
+
+        // Initialize Supabase when page loads
+        window.addEventListener('load', function() {
+            supabaseClient = window.supabase.createClient(
+                'https://wlkqoacibkoepxpccjin.supabase.co',
+                'sb_publishable_jTzU8HTvBD97YbH0NlWBDQ_VqYJ34pI'
+            );
+            console.log('Supabase initialized');
+        });
+
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            if (tab === 'form') document.getElementById('btnForm').classList.add('active');
+            if (tab === 'archive') {
+                document.getElementById('btnArchive').classList.add('active');
+                loadArchive();
+            }
+        }
+
+        // Image upload preview
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('imagePreview').innerHTML = `<img src="${event.target.result}" style="max-width: 200px; max-height: 150px; border: 1px solid black; margin-top: 10px;">`;
+                    document.getElementById('imageData').value = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Save material
+        function saveMaterial(event) {
+            event.preventDefault();
+            
+            const getChecked = (name) => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(x => x.value).join(', ');
+            
+            const material = {
+                material_name: document.getElementById('materialName').value,
+                code: document.getElementById('code').value,
+                matrix: getChecked('matrix'),
+                provider: document.getElementById('provider').value,
+                cost: document.getElementById('cost').value,
+                process_fab: getChecked('processFab'),
+                process_assembly: getChecked('processAssembly'),
+                system_type: getChecked('systemType'),
+                structural_logic: getChecked('structuralLogic'),
+                spatial_role: getChecked('spatialRole'),
+                scale: getChecked('scale'),
+                position: getChecked('position'),
+                operation: getChecked('operation'),
+                assembly: getChecked('assembly'),
+                reuse: getChecked('reuse'),
+                notes: document.getElementById('notes').value,
+                image: document.getElementById('imageData').value
+            };
+
+            supabaseClient.from('materials').insert([material]).then(function(result) {
+                if (result.error) throw result.error;
+                
+                document.getElementById('errorMsg').style.display = 'none';
+                document.getElementById('successMsg').style.display = 'block';
+                document.getElementById('materialForm').reset();
+                document.getElementById('imagePreview').innerHTML = '';
+                
+                setTimeout(() => {
+                    document.getElementById('successMsg').style.display = 'none';
+                }, 5000);
+            }).catch(function(err) {
+                document.getElementById('successMsg').style.display = 'none';
+                document.getElementById('errorMsg').textContent = '✗ Error: ' + err.message;
+                document.getElementById('errorMsg').style.display = 'block';
+            });
+            
+            return false;
+        }
+
+        // Load archive
+        function loadArchive() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '<div class="empty">Loading...</div>';
+            
+            supabaseClient.from('materials').select('*').order('id', { ascending: false }).then(function(result) {
+                if (result.error) throw result.error;
+                
+                const materials = result.data || [];
+                const search = document.getElementById('search').value.toLowerCase();
+                
+                const filtered = materials.filter(m => 
+                    !search || m.material_name.toLowerCase().includes(search) || m.code.toLowerCase().includes(search)
+                );
+                
+                if (filtered.length === 0) {
+                    grid.innerHTML = '<div class="empty">No materials found</div>';
+                    return;
+                }
+                
+                grid.innerHTML = filtered.map(m => `
+                    <div class="card">
+                        ${m.image ? `<img src="${m.image}" style="width: 100%; max-height: 200px; object-fit: cover; border-bottom: 1px solid black; margin-bottom: 10px;">` : ''}
+                        <h3>${m.material_name}</h3>
+                        <p><strong>Code:</strong> ${m.code}</p>
+                        ${m.provider ? `<p><strong>Provider:</strong> ${m.provider}</p>` : ''}
+                        ${m.cost ? `<p><strong>Cost:</strong> ${m.cost}</p>` : ''}
+                        <div class="badges">
+                            ${m.matrix ? m.matrix.split(', ').map(p => `<span class="badge">${p}</span>`).join('') : ''}
+                            ${m.process_fab ? m.process_fab.split(', ').map(p => `<span class="badge">${p}</span>`).join('') : ''}
+                            ${m.system_type ? m.system_type.split(', ').map(p => `<span class="badge">${p}</span>`).join('') : ''}
+                            ${m.scale ? m.scale.split(', ').map(p => `<span class="badge">${p}</span>`).join('') : ''}
+                        </div>
+                        ${m.notes ? `<p style="margin-top: 8px; font-size: 9px;">${m.notes}</p>` : ''}
+                    </div>
+                `).join('');
+            }).catch(function(err) {
+                grid.innerHTML = '<div class="empty">Error: ' + err.message + '</div>';
+            });
+        }
+
+        // Search listener
+        document.getElementById('search').addEventListener('keyup', loadArchive);
+    </script>
+</body>
+</html>
