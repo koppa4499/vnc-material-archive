@@ -589,11 +589,11 @@
             
             // Helper function to create checkbox options - single line
             const createCheckboxes = (value, options) => {
-                if (!value) return options.map(opt => `<input type="checkbox" disabled style="margin-right: 1px; margin-left: 2px;"><span style="font-size: 6px; margin-right: 6px;">${opt}</span>`).join('');
+                if (!value) return options.map(opt => `<span style="display: inline-flex; align-items: center; white-space: nowrap; margin-right: 5px;"><input type="checkbox" disabled style="margin-right: 1px;"><span style="font-size: 6px;">${opt}</span></span>`).join('');
                 const selected = value.split(',').map(v => v.trim());
                 return options.map(opt => {
                     const isChecked = selected.some(s => s === opt);
-                    return `<input type="checkbox" ${isChecked ? 'checked' : ''} disabled style="margin-right: 1px; margin-left: 2px;"><span style="font-size: 6px; margin-right: 6px;">${opt}</span>`;
+                    return `<span style="display: inline-flex; align-items: center; white-space: nowrap; margin-right: 5px;"><input type="checkbox" ${isChecked ? 'checked' : ''} disabled style="margin-right: 1px;"><span style="font-size: 6px;">${opt}</span></span>`;
                 }).join('');
             };
             
