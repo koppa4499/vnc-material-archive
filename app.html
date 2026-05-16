@@ -44,7 +44,7 @@
         .success { color: black; }
         .error { color: red; border-color: red; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        .card { border: 1px solid black; padding: 0; cursor: pointer; display: flex; flex-direction: column; height: 450px; overflow: hidden; }
+        .card { border: 1px solid black; padding: 0; cursor: pointer; display: flex; flex-direction: column; overflow: hidden; }
         .card img { width: 100%; height: 150px; object-fit: cover; }
         .card-content { flex: 1; overflow: hidden; display: flex; flex-direction: column; padding: 12px; padding-bottom: 0; }
         .card h3 { font-size: 10px; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; }
@@ -563,7 +563,7 @@
                                     ${m.system_type ? m.system_type.split(', ').map(p => `<span class="badge">${p}</span>`).join('') : ''}
                                     ${m.scale ? m.scale.split(', ').map(p => `<span class="badge">${p}</span>`).join('') : ''}
                                 </div>
-                                ${m.notes ? `<p style="margin-top: 8px; font-size: 9px;">${m.notes}</p>` : ''}
+                                ${m.notes ? `<p style="margin-top: 8px; margin-bottom: 8px; height: 60px; font-size: 9px;">${m.notes}</p>` : ''}
                             </div>
                         </div>
                         <button onclick="event.stopPropagation(); deleteMaterial(${m.id})">Delete</button>
