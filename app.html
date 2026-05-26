@@ -678,7 +678,7 @@
             };
             
             const html = `
-                <div style="padding: 0; margin: 0; background: white; font-family: Arial, sans-serif; font-size: 9px; width: 100%; min-height: 1018px;">
+                <div style="padding: 0; margin: 0; background: white; font-family: Arial, sans-serif; font-size: 9px; width: 100%;">
                     <div style="padding: 4px;">
                         <div style="text-align: center; font-size: 9px; font-weight: bold; margin-bottom: 4px; line-height: 1.1;">
                             <div>VNC</div>
@@ -824,64 +824,33 @@
                 return;
             }
             
-            // Clone element to avoid modifying original
-            const cloneElement = element.cloneNode(true);
-            
-            // Create temporary container
-            const tempContainer = document.createElement('div');
-            tempContainer.style.position = 'fixed';
-            tempContainer.style.top = '0';
-            tempContainer.style.left = '0';
-            tempContainer.style.width = '794px';
-            tempContainer.style.backgroundColor = '#ffffff';
-            tempContainer.style.padding = '0';
-            tempContainer.style.margin = '0';
-            tempContainer.style.zIndex = '-10000';
-            tempContainer.style.visibility = 'hidden';
-            tempContainer.appendChild(cloneElement);
-            
-            document.body.appendChild(tempContainer);
-            
-            // Force browser to render the element
-            tempContainer.offsetHeight;
-            
-            // Wait for rendering and images to load
-            setTimeout(() => {
-                const opt = {
-                    margin: [8, 8, 8, 8],
-                    filename: filename,
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { 
-                        scale: 2,
-                        useCORS: true, 
-                        logging: false, 
-                        allowTaint: true, 
-                        backgroundColor: '#ffffff',
-                        windowHeight: 2500
-                    },
-                    jsPDF: { 
-                        unit: 'mm', 
-                        format: 'a4', 
-                        orientation: 'portrait', 
-                        compress: false
-                    },
-                    pagebreak: { mode: 'avoid-all' }
-                };
-                
-                html2pdf()
-                    .set(opt)
-                    .from(cloneElement)
-                    .save()
-                    .catch(err => {
-                        console.error('PDF generation error:', err);
-                    })
-                    .finally(() => {
-                        // Clean up
-                        if (tempContainer.parentNode) {
-                            tempContainer.parentNode.removeChild(tempContainer);
-                        }
-                    });
-            }, 500);
+            const opt = {
+                margin: [8, 8, 8, 8],
+                filename: filename,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    scrollX: 0,
+                    scrollY: 0
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                }
+            };
+
+            html2pdf()
+                .set(opt)
+                .from(element)
+                .save()
+                .catch(err => {
+                    console.error('PDF generation error:', err);
+                });
         }
 
         // Close detail modal
